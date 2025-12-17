@@ -1,21 +1,14 @@
 <template>
   <BaseContent>
-    <template v-if="matchedNewsPostData && matchedNewsPostData.contents[0]">
-      <NewsContent :news-post="matchedNewsPostData.contents[0]" />
-    </template>
-    <template v-else>
-      <BaseText>
-        <p>
-          <em>ブログ記事のデータがありませんでした。</em>
-        </p>
-      </BaseText>
-    </template>
+    <NewsContent
+      v-if="matchedNewsPostData && matchedNewsPostData.contents[0]"
+      :news-post="matchedNewsPostData.contents[0]"
+    />
   </BaseContent>
 </template>
 
 <script setup lang="ts">
   import BaseContent from '~/components/atoms/BaseContent.vue'
-  import BaseText from '~/components/atoms/BaseText.vue'
   import NewsContent from '~/components/pages/news/NewsContent.vue'
 
   const route = useRoute()
@@ -24,18 +17,16 @@
   const normalizedSlug = fullSlug.replace(/\/$/, '')
 
   // ニュース記事の取得
-  const { data: matchedNewsPostData, error: matchedNewsPostDataError } =
-    await useFetchMicroCMSGetList({
-      endpoint: 'news',
-      filters: `slug[equals]${normalizedSlug}`,
-      page: 1,
-      pageLimit: 1,
-    })
+  const { data: matchedNewsPostData } = await useFetchMicroCMSGetList({
+    endpoint: 'news',
+    filters: `slug[equals]${normalizedSlug}`,
+    page: 1,
+    pageLimit: 1,
+  })
 
-  if (!matchedNewsPostDataError) {
+  if (!matchedNewsPostData.value?.contents?.length) {
     throw createError({
       statusCode: 404,
-      statusMessage: '指定されたカテゴリが見つかりません',
     })
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div :class="contentClass">
+  <div :class="rootClass">
     <em class="c-list-category__title">category</em>
 
     <ul class="c-list-category__list">
@@ -41,7 +41,7 @@
     type?: 'sidenav'
   }>()
 
-  const contentClass = computed(() => {
+  const rootClass = computed(() => {
     return ['c-list-category', props.type === 'sidenav' && 'c-list-category--sidenav']
   })
 
@@ -55,11 +55,28 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px 32px;
+    align-items: center;
 
     &__title {
+      position: relative;
+      display: block;
       flex: 0 0 auto;
-      padding-right: 2px;
+      padding-left: 13px;
       font-size: 2rem;
+
+      &::before {
+        --local-padding-y: 3px;
+
+        position: absolute;
+        top: var(--local-padding-y);
+        left: 0;
+        display: block;
+        width: 5px;
+        height: calc(100% - var(--local-padding-y) * 2);
+        content: '';
+        background: var(--color-gradient);
+        border-radius: 2px;
+      }
     }
 
     &__list {
@@ -70,7 +87,6 @@
 
       @include mixin.media(pc) {
         gap: 8px 16px;
-        padding-top: 6px;
       }
     }
 
@@ -107,6 +123,7 @@
     }
 
     &--sidenav {
+      align-items: normal;
       margin-top: 40px;
 
       @include mixin.media(pc) {
@@ -151,6 +168,10 @@
               opacity: var(--opacity);
             }
           }
+        }
+
+        &:focus-visible {
+          outline-offset: -1px;
         }
       }
     }

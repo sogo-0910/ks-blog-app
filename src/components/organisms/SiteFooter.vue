@@ -6,18 +6,18 @@
           <BaseLogo />
         </div>
 
-        <nav class="c-footer__navigation">
+        <div class="c-footer__navigation">
           <FooterNavigation />
-        </nav>
+        </div>
 
         <div class="c-footer__sns">
-          <FooterSNS />
+          <SNSIcons type="footer" />
         </div>
 
         <div class="c-footer__copyright">
-          <small class="c-footer__copyrightText"
-            >Copyright &copy; KS BLOG. All Rights Reserved.</small
-          >
+          <small class="c-footer__copyrightText">
+            Copyright &copy; KS BLOG. All Rights Reserved.
+          </small>
         </div>
       </div>
     </BaseContent>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
   import BaseContent from '~/components/atoms/BaseContent.vue'
   import BaseLogo from '~/components/atoms/BaseLogo.vue'
-  import FooterSNS from '~/components/molecules/FooterSNS.vue'
+  import SNSIcons from '~/components/molecules/SNSIcons.vue'
   import FooterNavigation from '~/components/molecules/FooterNavigation.vue'
 </script>
 
@@ -73,6 +73,11 @@
         padding-bottom: var(--local-gap-y);
         border-bottom: 1px solid #484848;
       }
+
+      @include mixin.media(pc) {
+        display: flex;
+        align-items: center;
+      }
     }
 
     &__sns {
@@ -86,8 +91,11 @@
     &__copyrightText {
       display: block;
       font-size: 1.2rem;
-      color: #6e6e6e;
       text-align: center;
+    }
+
+    *:focus-visible {
+      outline-color: var(--color-outline-white);
     }
   }
 </style>
