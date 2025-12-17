@@ -20,7 +20,6 @@
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'format-detection', content: 'telephone=no' },
-      { name: 'robots', content: 'noindex' },
       { name: 'description', content: 'KS BLOGはブログサイトです。' },
       { name: 'twitter:card', content: 'summary' },
       { property: 'og:url', content: currentPath },
