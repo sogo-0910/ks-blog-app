@@ -2,9 +2,7 @@
   <header class="c-header">
     <BaseContent padding-y="none">
       <div class="c-header__inner">
-        <h1>
-          <BaseLogo />
-        </h1>
+        <BaseLogo />
         <BaseHamburgerMenu
           :aria-controls="menuId"
           :aria-expanded="isMenuOpen"
@@ -139,7 +137,7 @@
     flex-direction: column;
     justify-content: center;
     height: var(--header-height);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(22px);
 
     &__inner {
       display: flex;

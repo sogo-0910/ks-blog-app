@@ -4,7 +4,9 @@
     <main class="l-content" :inert="isMenuOpen ? true : undefined">
       <slot />
     </main>
-    <SiteBreadcrumbs />
+    <ClientOnly>
+      <SiteBreadcrumbs :inert="isMenuOpen ? true : undefined" />
+    </ClientOnly>
     <SiteFooter :inert="isMenuOpen ? true : undefined" />
   </div>
 </template>

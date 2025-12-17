@@ -1,20 +1,20 @@
 <template>
   <BaseContent>
     <BaseHeadingLevel1 sub-title="Blog">
-      {{ matchedCategoryData?.contents[0].name }}
+      {{ matchedCategoryData?.contents[0].name }}のブログ記事一覧
     </BaseHeadingLevel1>
     <template v-if="blogCategory && blogCategory?.contents.length > 0">
       <BlogCategories :blog-category="blogCategory?.contents" />
     </template>
     <template v-else-if="blogCategoryError">
-      <BaseText>
+      <BaseText text-align="center">
         <p>
           <em>ブログカテゴリのデータの取得に失敗しました。</em>
         </p>
       </BaseText>
     </template>
     <template v-else>
-      <BaseText>
+      <BaseText text-align="center">
         <p>
           <em>ブログカテゴリのデータがありませんでした。</em>
         </p>
@@ -31,9 +31,9 @@
       />
     </template>
     <template v-else>
-      <BaseText>
+      <BaseText text-align="center">
         <p>
-          <em>ブログ一覧のデータがありませんでした。</em>
+          <em>ブログ記事一覧のデータがありませんでした。</em>
         </p>
       </BaseText>
     </template>
@@ -53,25 +53,17 @@
   const { params } = useRoute()
   const slug = route.params.slug as string
 
-  const { data: matchedCategoryData, error: matchedCategoryDataError } =
-    await useFetchMicroCMSGetList({
-      endpoint: 'blog-category',
-      filters: `slug[equals]${slug}`,
-      page: 1,
-      pageLimit: 1,
-    })
-
-  if (!matchedCategoryDataError) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: '指定されたカテゴリが見つかりません',
-    })
-  }
+  const { data: matchedCategoryData } = await useFetchMicroCMSGetList({
+    endpoint: 'blog-category',
+    filters: `slug[equals]${slug}`,
+    page: 1,
+    pageLimit: 1,
+  })
 
   const page = ref(Number(Array.isArray(params.page) ? params.page[0] : params.page))
   const pageLimit = pageLimitBase
 
-  const { data: blogPosts, error: blogPostsError } = await useFetchMicroCMSGetList({
+  const { data: blogPosts } = await useFetchMicroCMSGetList({
     endpoint: 'blog',
     filters: `blog-category[contains]${matchedCategoryData.value?.contents[0]?.id}`,
     page: page.value,
@@ -85,13 +77,6 @@
 
   const totalPage = ref(Math.ceil(totalCount / pageLimit))
 
-  if (blogPostsError.value) {
-    throw showError({
-      statusCode: 404,
-      statusMessage: 'ページが存在しません',
-    })
-  }
-
   const onPaging = (pageNumber: number) => {
     const router = useRouter()
     router.push({
@@ -104,13 +89,19 @@
     filters: '',
   })
 
+  if (!matchedCategoryData?.value?.contents[0]) {
+    throw createError({
+      statusCode: 404,
+    })
+  }
+
   const breadcrumbState = useBreadcrumbState()
 
   breadcrumbState.value = [
     { name: 'HOME', path: '/' },
-    { name: `Blog一覧`, path: `/blog` },
+    { name: `ブログ記事一覧`, path: `/blog` },
     {
-      name: `${slug}のカテゴリ一覧：${page.value}ページ`,
+      name: `${matchedCategoryData.value?.contents[0].name}のブログ記事一覧：${page.value}ページ`,
       path: `/blog/category/${slug}/${page.value}`,
     },
   ]
@@ -118,19 +109,19 @@
   const breadcrumbJsonLd = useBreadcrumbJsonLd(breadcrumbState?.value)
 
   useHead({
-    title: `${slug}カテゴリ一覧の${page.value}ページ | ブログ一覧 | KS BLOG`,
+    title: `${matchedCategoryData.value?.contents[0].name}ブログ記事一覧の${page.value}ページ | ブログ記事一覧 | KS BLOG`,
     meta: [
       {
         name: 'description',
-        content: `KS BLOGはブログサイトです。ブログ一覧の${slug}カテゴリ一覧の${page.value}をご紹介。`,
+        content: `KS BLOGはブログサイトです。ブログ記事一覧の${matchedCategoryData.value?.contents[0].name}ブログ記事一覧の${page.value}ページをご紹介。`,
       },
       {
         property: 'og:title',
-        content: `${slug}カテゴリ一覧の${page.value}ページ | ブログ一覧 | KS BLOG`,
+        content: `${matchedCategoryData.value?.contents[0].name}ブログ記事一覧の${page.value}ページ | ブログ記事一覧 | KS BLOG`,
       },
       {
         property: 'og:description',
-        content: `KS BLOGはブログサイトです。ブログ一覧の${slug}カテゴリ一覧の${page.value}をご紹介。`,
+        content: `KS BLOGはブログサイトです。ブログ記事一覧の${matchedCategoryData.value?.contents[0].name}ブログ記事一覧の${page.value}ページをご紹介。`,
       },
       { property: 'og:type', content: 'article' },
     ],
