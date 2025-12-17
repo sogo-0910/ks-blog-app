@@ -31,6 +31,10 @@
       },
       { property: 'og:site_name', content: 'KS BLOG オフィシャルサイト' },
       { property: 'og:image', content: `${baseHost}/shared/img/ogp.png` },
+      {
+        name: 'google-site-verification',
+        content: 'S3m8IkA3fQCk4YrV_MIyQnH2pFC70nKhgpjKLCJQ3D0',
+      },
     ],
     link: [{ rel: 'canonical', href: currentPath }],
   })
